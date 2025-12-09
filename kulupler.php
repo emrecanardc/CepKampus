@@ -47,52 +47,7 @@ $active_uni = $secilen_kisaltma;
 $page_title = "Kulüpler Listesi";
 // YENİ DÜZELTME: Güvenli include komutu
 include dirname(__FILE__) . '/template/header.php'; 
-?>
 
-<div class="row">
-    <div class="col-md-12">
-        <h2 class="text-center text-primary" style="color: var(--uni-main-color) !important;"><?php echo $universite_adi; ?> Kulüpleri</h2>
-        <hr>
-    </div>
-</div>
-
-<div class="club-grid row">
-    <?php
-    if ($kulup_sonuclari && $kulup_sonuclari->num_rows > 0) {
-        while ($kulup = $kulup_sonuclari->fetch_assoc()) {
-            
-            // Kurdele için kulüp adının ilk harfini alıyoruz
-            $initial = strtoupper(substr($kulup['ad'], 0, 1));
-
-            echo '<div class="col-md-4 col-sm-6 col-xs-12">';
-            // KARTIN TAMAMI LİNK OLMALIDIR
-            echo '<a href="kulup_detay.php?id=' . $kulup['kulup_id'] . '" ';
-            echo 'class="club-card thumbnail" '; 
-            echo 'data-initial="' . $initial . '" '; // Kurdele için ilk harf
-            echo 'style="--club-color: ' . htmlspecialchars($kulup['ana_renk']) . '; --club-secondary-color: ' . htmlspecialchars($kulup['ikincil_renk']) . ';">';
-            
-            
-            echo '    <div class="club-card-header">';
-            echo '        <h3>' . htmlspecialchars($kulup['ad']) . '</h3>';
-            echo '        <span>' . htmlspecialchars($kulup['kisaltma']) . ' | Kur: ' . htmlspecialchars($kulup['kurulus_yili']) . '</span>'; 
-            echo '    </div>';
-            
-            echo '    <div class="club-card-body">';
-            echo '        <p class="category">Kategori: ' . htmlspecialchars($kulup['kategori']) . '</p>';
-            echo '        <p class="description">' . substr(htmlspecialchars($kulup['aciklama']), 0, 80) . '...</p>';
-            echo '        <span class="card-link-text">Detayları Gör →</span>';
-            echo '    </div>';
-
-            echo '</a>';
-            echo '</div>'; // /.col-md-4
-        }
-    } else {
-        echo '<div class="col-md-12"><p class="alert alert-warning text-center">Bu üniversiteye ait aktif kulüp bulunmamaktadır.</p></div>';
-    }
-    ?>
-</div>
-
-<?php
 // YENİ DÜZELTME: Güvenli include komutu
 include dirname(__FILE__) . '/template/footer.php'; 
 ?>
