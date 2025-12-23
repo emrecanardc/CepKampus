@@ -24,7 +24,7 @@ try {
     $stmt->execute([$kulup_id]);
     $uyeler = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // 3. Etkinlikler (Hepsini Çekip PHP'de Ayıracağız)
+    // 3. Etkinlikler
     $stmt = $pdo->prepare("SELECT * FROM etkinlikler WHERE kulup_id = ? ORDER BY tarih_saat ASC");
     $stmt->execute([$kulup_id]);
     $tum_etkinlikler = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -37,13 +37,13 @@ try {
         if ($etkinlik['tarih_saat'] >= $su_an) {
             $gelecek_etkinlikler[] = $etkinlik;
         } else {
-            // Geçmiş etkinlikleri ters sıralayalım (en yeni geçmiş en üstte olsun)
             array_unshift($gecmis_etkinlikler, $etkinlik);
         }
     }
 
-    // 4. Sponsorlar
-    $stmt = $pdo->prepare("SELECT s.ad FROM kulup_sponsorluklari ks 
+    // 4. Sponsorlar (GÜNCELLENDİ: 's.logo' çekiliyor)
+    $stmt = $pdo->prepare("SELECT s.ad, s.logo, s.web_sitesi 
+                           FROM kulup_sponsorluklari ks 
                            JOIN sponsorlar s ON ks.sponsor_id = s.sponsor_id 
                            WHERE ks.kulup_id = ?");
     $stmt->execute([$kulup_id]);

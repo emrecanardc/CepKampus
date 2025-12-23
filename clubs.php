@@ -75,6 +75,7 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
         .info { top: 120px; } 
         #current-title { text-shadow: 0 4px 10px rgba(0,0,0,0.5); font-size: 3rem; margin-bottom: 5px; }
         #current-description { text-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 1.2rem; margin-top: 5px; }
+        
         #dynamic-details {
             max-width: 1200px; margin: 0 auto; padding: 40px 20px 100px 20px;
             opacity: 0; transform: translateY(20px); transition: all 0.5s ease;
@@ -104,55 +105,75 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
         .event-meta { font-size: 0.85rem; opacity: 0.6; display: flex; gap: 15px; }
         .past-event { opacity: 0.5; filter: grayscale(0.8); } 
 
-        .sponsor-grid { display: flex; gap: 15px; flex-wrap: wrap; }
-        .sponsor-item { background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 8px; font-weight: 500; font-size: 1rem; }
+        /* === SPONSOR ALANI === */
+        .sponsor-grid { display: flex; gap: 20px; flex-wrap: wrap; align-items: center; justify-content: flex-start; }
+        
+        .sponsor-item {
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 100px; height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .sponsor-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border-color: rgba(255,255,255,0.5);
+        }
+        
+        .sponsor-logo {
+            width: 100%; height: 100%;
+            object-fit: contain;
+            filter: grayscale(100%);
+            transition: filter 0.3s;
+        }
+        .sponsor-item:hover .sponsor-logo {
+            filter: grayscale(0%);
+        }
+        .sponsor-text-only { font-weight: bold; font-size: 0.9rem; text-align: center; }
+
         .loading-text { text-align: center; font-size: 1.5rem; padding: 50px; opacity: 0.7; }
 
-        /* === 2. DATATABLES CUSTOM CSS (DARK THEME) === */
-        /* Tablo genel yazı rengi ve arkaplanı */
-        table.dataTable tbody tr {
-            background-color: transparent !important;
-            color: #fff !important;
-        }
-        table.dataTable tbody tr:hover {
-            background-color: rgba(255,255,255,0.1) !important;
-        }
-        /* Başlıklar */
-        table.dataTable thead th {
-            color: #fff;
-            border-bottom: 1px solid rgba(255,255,255,0.3) !important;
-        }
-        /* Arama kutusu ve yazılar */
-        .dataTables_wrapper .dataTables_length, 
-        .dataTables_wrapper .dataTables_filter, 
-        .dataTables_wrapper .dataTables_info, 
-        .dataTables_wrapper .dataTables_processing, 
-        .dataTables_wrapper .dataTables_paginate {
-            color: #ccc !important;
-        }
-        /* Arama inputu */
+        /* === DATATABLES CSS === */
+        .dataTables_wrapper { color: #ddd !important; font-size: 0.9rem; padding-top: 10px; }
+        .dataTables_wrapper .dataTables_filter { float: left; text-align: left; margin-bottom: 15px; width: 100%; }
+        .dataTables_wrapper .dataTables_filter label { color: #fff !important; font-weight: 500; display: flex; align-items: center; gap: 10px; width: 100%; }
         .dataTables_wrapper .dataTables_filter input {
-            color: #fff;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 5px;
-            padding: 5px;
+            background-color: rgba(255,255,255,0.1) !important; border: 1px solid rgba(255,255,255,0.2) !important;
+            color: #fff !important; border-radius: 8px; padding: 8px 12px; outline: none; width: 100%; max-width: 300px;
         }
-        /* Tablo alt çizgileri */
-        table.dataTable td {
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+        .bottom-wrapper { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; flex-wrap: wrap; gap: 10px; }
+        .length-wrapper { text-align: center; margin-top: 15px; opacity: 0.5; font-size: 0.75rem; transition: opacity 0.3s; }
+        .length-wrapper:hover { opacity: 1; }
+        .dataTables_wrapper .dataTables_length label { color: #ccc !important; display: inline-flex; align-items: center; gap: 5px; justify-content: center; }
+        .dataTables_wrapper .dataTables_length select {
+            background-color: #222 !important; color: #fff !important; border: 1px solid rgba(255,255,255,0.2) !important; border-radius: 5px; padding: 2px 5px;
         }
-        /* Sayfalama Butonları */
-        .dataTables_wrapper .dataTables_paginate .paginate_button {
-            color: #fff !important;
-        }
-        .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-            background: rgba(255,255,255,0.2) !important;
-            border-color: transparent !important;
-            color: #fff !important;
-        }
+        .dataTables_wrapper .dataTables_length select option { background-color: #222; color: #fff; }
+        
+        table.dataTable { width: 100% !important; border-collapse: separate !important; border-spacing: 0 5px; }
+        table.dataTable tbody tr { background-color: rgba(255,255,255,0.05) !important; transition: background 0.3s; }
+        table.dataTable tbody tr:hover { background-color: rgba(255,255,255,0.15) !important; }
+        table.dataTable th, table.dataTable td { border-bottom: none !important; padding: 12px 10px !important; vertical-align: middle; }
+        table.dataTable thead th { border-bottom: 2px solid rgba(255,255,255,0.2) !important; color: #aaa; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
 
-        @media(max-width: 768px) { .details-grid { grid-template-columns: 1fr; } .uni-header h1 { font-size: 0.9rem; } .header-logo { font-size: 0.9rem; } }
+        .role-badge { background: rgba(255,255,255,0.15); padding: 5px 12px; border-radius: 20px; font-size: 0.85rem; white-space: nowrap; display: inline-block; }
+        .dataTables_wrapper .dataTables_paginate .paginate_button { color: #fff !important; border-radius: 5px !important; }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current { background: rgba(255,255,255,0.3) !important; border: none !important; }
+        .dataTables_wrapper .dataTables_paginate .paginate_button:hover { background: rgba(255,255,255,0.5) !important; color: #000 !important; border: none !important; }
+
+        @media(max-width: 768px) { 
+            .details-grid { grid-template-columns: 1fr; } 
+            .uni-header h1 { font-size: 0.9rem; } 
+            .header-logo { font-size: 0.9rem; } 
+            .dataTables_wrapper .dataTables_filter { float: none; text-align: left; }
+            .dataTables_wrapper .dataTables_filter input { width: 100%; margin-left: 0; margin-top: 5px; }
+        }
     </style>
 </head>
 <body>
@@ -204,9 +225,6 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
         const detailsContainer = document.getElementById('dynamic-details');
         
         let currentIndex = Math.floor(items.length / 2);
-        
-        // Tabloyu hafızada tutmak için değişken (Destroy etmek için lazım)
-        let membersTableInstance = null;
 
         function loadClubDetails(index) {
             if (!items[index]) return;
@@ -226,9 +244,9 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
 
                     document.body.style.background = `radial-gradient(ellipse at center, ${anaRenk} 0%, #000000 100%)`;
                     titleEl.textContent = data.kulup.ad;
-                    descEl.textContent = data.kulup.kisaltma || '';
+                    descEl.textContent = data.kulup.kategori || '';
 
-                    // Etkinlikler (Gelecek & Geçmiş)
+                    // Etkinlikler
                     let gelecekHtml = data.etkinlikler.gelecek.length > 0 ? 
                         data.etkinlikler.gelecek.map(e => `
                             <div class="event-card" style="border-color:${ikinciRenk}">
@@ -245,8 +263,7 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="event-meta"><span>📍 ${e.konum}</span><span>👥 Katılım: ${e.tahmini_katilimci} Kişi</span></div>
                             </div>`).join('') : '<p style="opacity:0.6">Geçmiş etkinlik yok.</p>';
 
-                    // === 4. DATATABLE İÇİN HTML TABLO OLUŞTURMA ===
-                    // Listeyi div yerine <table> olarak hazırlıyoruz
+                    // Üye Tablosu
                     let membersHtml = `
                         <table id="membersTable" class="display" style="width:100%">
                             <thead>
@@ -259,16 +276,57 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                                 ${data.uyeler.map(u => `
                                     <tr>
                                         <td>${u.ad} ${u.soyad}</td>
-                                        <td>
-                                            <span style="background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:4px; font-size:0.9em;">
-                                                ${u.rol}
-                                            </span>
-                                        </td>
+                                        <td><span class="role-badge">${u.rol}</span></td>
                                     </tr>
                                 `).join('')}
                             </tbody>
                         </table>
                     `;
+
+                    // === SPONSORLAR KODU (GÜNCELLENDİ: Link Düzeltmesi) ===
+                    let sponsorsHtml = '';
+                    if (data.sponsorlar.length > 0) {
+                        data.sponsorlar.forEach(s => {
+                            // Logo İşlemleri
+                            let rawLogo = s.logo || s.resim_url || '';
+                            let logoSrc = null;
+
+                            if (rawLogo !== '') {
+                                if (rawLogo.startsWith('images/')) {
+                                    logoSrc = rawLogo;
+                                } else {
+                                    logoSrc = 'images/' + rawLogo;
+                                }
+                            }
+
+                            // Link İşlemleri (HTTP Ekleme)
+                            let rawLink = s.web_sitesi ? s.web_sitesi.trim() : '';
+                            let webLink = '#';
+                            let target = '';
+
+                            if (rawLink !== '') {
+                                target = 'target="_blank"'; // Link varsa yeni sekme aç
+                                
+                                // Başında http:// veya https:// yoksa ekle
+                                if (!rawLink.startsWith('http://') && !rawLink.startsWith('https://')) {
+                                    webLink = 'https://' + rawLink;
+                                } else {
+                                    webLink = rawLink;
+                                }
+                            }
+
+                            sponsorsHtml += `
+                                <a href="${webLink}" ${target} class="sponsor-item" title="${s.ad}">
+                                    ${logoSrc ? 
+                                        `<img src="${logoSrc}" class="sponsor-logo" alt="${s.ad}">` : 
+                                        `<span class="sponsor-text-only">${s.ad}</span>`
+                                    }
+                                </a>
+                            `;
+                        });
+                    } else {
+                        sponsorsHtml = '<p>Sponsor yok.</p>';
+                    }
 
                     let html = `
                         <div class="details-grid">
@@ -296,7 +354,7 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="card-box">
                                     <h3 class="section-title" style="border-color:${ikinciRenk}; color:${ikinciRenk}">Sponsorlar</h3>
                                     <div class="sponsor-grid">
-                                        ${data.sponsorlar.length > 0 ? data.sponsorlar.map(s => `<div class="sponsor-item">${s.ad}</div>`).join('') : '<p>Sponsor yok.</p>'}
+                                        ${sponsorsHtml}
                                     </div>
                                 </div>
                             </div>
@@ -307,26 +365,36 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                     detailsContainer.style.opacity = '1';
                     detailsContainer.classList.add('visible');
 
-                    // === 5. DATATABLE BAŞLATMA ===
-                    // Eğer eski tablo varsa yok et (çakışmayı önler)
+                    // Datatable Kurulumu
                     if ($.fn.DataTable.isDataTable('#membersTable')) {
                         $('#membersTable').DataTable().destroy();
                     }
 
-                    // Yeni tabloyu başlat
                     $('#membersTable').DataTable({
                         "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.13.6/i18n/tr.json" // Türkçe Dil Desteği
+                            "search": "Ara:",
+                            "lengthMenu": "Sayfada _MENU_ kayıt göster",
+                            "zeroRecords": "Eşleşen kayıt bulunamadı",
+                            "info": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+                            "infoEmpty": "Kayıt yok",
+                            "infoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+                            "paginate": {
+                                "first": "İlk",
+                                "last": "Son",
+                                "next": "Sonraki",
+                                "previous": "Önceki"
+                            }
                         },
-                        "pageLength": 5, // Sayfada 5 kişi göster
+                        "pageLength": 5,
                         "lengthMenu": [5, 10, 20],
-                        "ordering": false // Sıralamayı kapat (Başkan en üstte kalsın diye)
+                        "ordering": false,
+                        "autoWidth": false,
+                        "dom": 'frt<"bottom-wrapper"ip><"length-wrapper"l>' 
                     });
                 })
                 .catch(err => console.error("Veri çekme hatası:", err));
         }
 
-        // Coverflow Fonksiyonları (Aynen korundu)
         function updateCoverflow() {
             items.forEach((item, index) => {
                 let offset = index - currentIndex;
