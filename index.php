@@ -20,65 +20,101 @@ $bg_images = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Üniversite Seçimi</title>
+    <title>CepKampüs - Üniversite Seçimi</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
         /* === GENEL AYARLAR === */
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Poppins', sans-serif; }
         .container { display: flex; width: 100%; height: 100%; }
 
+        /* === YENİ EKLENEN MARKA KATMANI (Branding Layer) === */
+        .branding-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; /* Tıklamalar arkaya geçer */
+            z-index: 1000; /* En üstte durur */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px 40px;
+            box-sizing: border-box;
+        }
+
+        /* Sol Üst Logo */
+        .brand-logo {
+            font-family: 'Montserrat', sans-serif; /* Logo için özel font */
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+            display: flex; align-items: center;
+        }
+        
+        .brand-logo::after {
+            content: ''; display: block; width: 8px; height: 8px; 
+            background: #fff; border-radius: 50%; margin-left: 8px;
+            box-shadow: 0 0 10px rgba(255,255,255,0.8);
+        }
+
+        /* Sağ Alt İmza */
+        .creator-credit {
+            font-family: 'Montserrat', sans-serif;
+            text-align: right;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.9);
+        }
+
+        .creator-credit strong {
+            color: #fff;
+            font-weight: 700;
+            margin-left: 5px;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+        }
+
+        /* === MEVCUT TASARIM (AYNEN KORUNDU) === */
         .split {
             flex: 1;
             position: relative;
-            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); /* Daha akıcı animasyon */
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; overflow: hidden; color: white;
             cursor: pointer;
         }
 
-        /* ARKAPLAN RESMİ (En Altta) */
         .bg-image {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-size: cover; background-position: center;
             transition: transform 0.8s ease;
             z-index: 1;
-            filter: grayscale(30%); /* Resmi hafif gri yap ki renk daha iyi belli olsun */
+            filter: grayscale(30%);
         }
 
-        /* RENKLİ PERDE (Resmin Üstünde) */
         .overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 2;
-            
-            /* İŞTE ÇÖZÜM BURADA: */
-            /* Rengi HTML'den HEX olarak alacağız ama şeffaflığı buradan vereceğiz */
-            opacity: 0.75; /* Başlangıçta %20 görünürlük */ 
-            
+            opacity: 0.75; 
             transition: opacity 0.6s ease, background-color 0.6s ease;
-            /*mix-blend-mode: multiply; /* Rengi fotoğrafla daha iyi kaynaştırır (Opsiyonel) */
         }
 
-        /* İÇERİK (En Üstte) */
         .content {
             position: relative; z-index: 3; text-align: center;
             transition: transform 0.5s ease;
             padding: 20px;
         }
 
-        /* === HOVER EFEKTLERİ === */
-        
-        .split:hover { flex: 2.5; } /* Genişle */
-        .split:hover .bg-image { 
-            transform: scale(1.1); 
-            filter: grayscale(0%); /* Resim canlansın */
-        }
+        /* Hover Efektleri */
+        .split:hover { flex: 2.5; }
+        .split:hover .bg-image { transform: scale(1.1); filter: grayscale(0%); }
+        .split:hover .overlay { opacity: 0.1 !important; }
 
-        /* Üzerine gelince perde şeffaflaşsın (Resim ortaya çıksın) */
-        .split:hover .overlay {
-            opacity: 0.1 !important; /* %10 görünürlük (neredeyse yok) */
-        }
-
-        /* Başlıklar */
+        /* Başlıklar ve Buton */
         .content h1 {
             font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase;
             text-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -88,7 +124,6 @@ $bg_images = [
         
         .content p { font-size: 1.2rem; text-shadow: 0 2px 5px rgba(0,0,0,0.8); margin-bottom: 20px;}
 
-        /* Buton */
         .btn {
             border: 2px solid #fff; padding: 12px 35px; 
             display: inline-block; transition: all 0.3s;
@@ -99,18 +134,20 @@ $bg_images = [
         }
 
         .split:hover .btn {
-            background-color: #fff;
-            color: #333; 
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            background-color: #fff; color: #333; 
+            transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
     </style>
 </head>
 <body>
 
+    <div class="branding-layer">
+        <div class="brand-logo">CEPKAMPÜS</div>
+        <div class="creator-credit">Project by <strong>Emre Can Ardıç</strong></div>
+    </div>
+
     <div class="container">
         <?php foreach ($universiteler as $uni): 
-            // HEX KODUNU ALIYORUZ (Veritabanında #D35400 var)
             $renk = !empty($uni['ana_renk']) ? $uni['ana_renk'] : '#333';
         ?>
             
