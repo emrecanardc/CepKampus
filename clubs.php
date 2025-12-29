@@ -43,33 +43,38 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
         /* === HEADER === */
         .uni-header {
             position: fixed; top: 0; left: 0; right: 0; height: 70px;
-            background-color: <?php echo $header_renk; ?>; 
+            background-color: <?php echo $header_renk; ?>;
             box-shadow: 0 4px 15px rgba(0,0,0,0.4);
-            display: flex; align-items: center; justify-content: center;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 18px; box-sizing: border-box;
             z-index: 3000; border-bottom: 1px solid rgba(255,255,255,0.1);
             backdrop-filter: blur(5px);
         }
-        .uni-header h1 {
-            font-size: 1.2rem; margin: 0; text-transform: uppercase;
-            letter-spacing: 1px; font-weight: 800;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3); text-align: center; max-width: 60%;
+        .uni-header .header-left,
+        .uni-header .header-center,
+        .uni-header .header-right { display:flex; align-items:center; gap:12px }
+        .uni-header .header-left { min-width:160px }
+        .uni-header .header-right { min-width:160px; justify-content:flex-end }
+        .uni-header .header-center { flex:1; justify-content:center; text-align:center; flex-direction:column }
+        .uni-name { color:#fff; font-size:1.35rem; font-weight:900; text-decoration:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:84%; letter-spacing:0.6px }
+        .uni-name:hover { transform:scale(1.02); transition:transform 160ms ease }
+        .uni-hint { font-size:0.78rem; opacity:0.9; color:rgba(255,255,255,0.92); margin-top:6px }
+        .back-btn { color: white; background: rgba(0,0,0,0.18); padding:8px 14px; border-radius:22px; text-decoration:none; border:1px solid rgba(255,255,255,0.12); font-size:0.95rem; font-weight:600 }
+        .back-btn:hover { background: rgba(255,255,255,0.08) }
+        .brand-link { display:inline-flex; align-items:center; gap:10px; color:#fff; text-decoration:none }
+        .brand-link svg { width:30px; height:30px; flex:0 0 30px }
+        .brand-text { font-weight:900; text-transform:uppercase; letter-spacing:2px }
+        .header-link { color:#fff; text-decoration:none; background: rgba(255,255,255,0.06); padding:8px 12px; border-radius:10px; font-weight:700 }
+        .header-link:hover { background: rgba(255,255,255,0.12); }
+
+        @media(max-width:700px) {
+            .uni-name { font-size:1.05rem; max-width:60% }
+            .uni-hint { display:none }
+            .uni-header { padding: 0 10px }
         }
-        .back-btn {
-            position: absolute; left: 20px; color: white; background: rgba(0,0,0,0.2); 
-            padding: 8px 20px; border-radius: 30px; text-decoration: none;
-            border: 1px solid rgba(255,255,255,0.3); transition: all 0.3s ease;
-            font-size: 0.9rem; font-weight: 500;
-        }
-        .back-btn:hover { background: rgba(255,255,255,0.2); transform: translateX(-3px); }
-        .header-logo {
-            position: absolute; right: 20px; font-family: 'Montserrat', sans-serif;
-            font-weight: 900; font-size: 1.2rem; letter-spacing: 2px; color: #fff;
-            text-transform: uppercase; display: flex; align-items: center; opacity: 0.9;
-        }
-        .header-logo::after {
-            content: ''; display: block; width: 6px; height: 6px;
-            background: #fff; border-radius: 50%; margin-left: 6px;
-        }
+        .header-links { position: absolute; right: 140px; top: 0; height:70px; display:flex; align-items:center; gap:10px }
+        .header-links a { color:#fff; text-decoration:none; background: rgba(255,255,255,0.06); padding:6px 10px; border-radius:8px; font-weight:600 }
+        .header-links a:hover { background: rgba(255,255,255,0.12); }
 
         /* === SLIDER === */
         .info { top: 120px; } 
@@ -179,9 +184,32 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
     <div class="uni-header">
-        <a href="index.php" class="back-btn">← Geri</a>
-        <h1><?php echo htmlspecialchars($uni_bilgi['ad']); ?></h1>
-        <div class="header-logo">CEPKAMPÜS</div>
+        <div class="header-left">
+            <a href="index.php" class="brand-link" aria-label="Ana sayfa">
+                <!-- inline logo SVG -->
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                    <defs>
+                        <linearGradient id="g1" x1="0" x2="1">
+                            <stop offset="0" stop-color="#6EE7B7"/>
+                            <stop offset="1" stop-color="#60A5FA"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="64" height="64" rx="12" fill="#0b1220" />
+                    <path d="M16 40 L28 20 L36 34 L48 16" stroke="url(#g1)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span class="brand-text">CepKampüs</span>
+            </a>
+        </div>
+
+        <div class="header-center">
+            <a href="index.php" class="uni-name"><?php echo htmlspecialchars($uni_bilgi['ad']); ?></a>
+            <div class="uni-hint">Üniversite seçimine dönmek için üniversite adına tıklayın</div>
+        </div>
+
+        <div class="header-right">
+            <a href="about.php" class="header-link">Hakkında</a>
+            <a href="report.php" class="header-link">Rapor</a>
+        </div>
     </div>
 
     <section id="home" class="section" style="min-height: 70vh;">
@@ -244,7 +272,7 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
 
                     document.body.style.background = `radial-gradient(ellipse at center, ${anaRenk} 0%, #000000 100%)`;
                     titleEl.textContent = data.kulup.ad;
-                    descEl.textContent = data.kulup.kategori || '';
+                    descEl.textContent = data.kulup.kisaltma || '';
 
                     // Etkinlikler
                     let gelecekHtml = data.etkinlikler.gelecek.length > 0 ? 
@@ -336,10 +364,19 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                                     <p>${data.kulup.aciklama || 'Açıklama bulunmuyor.'}</p>
                                     <p style="margin-top:10px; opacity:0.7;">Kategori: <strong>${data.kulup.kategori || 'Genel'}</strong></p>
                                 </div>
+
+                                <div class="card-box">
+                                    <h3 class="section-title" style="border-color:${ikinciRenk}; color:${ikinciRenk}">Sponsorlar</h3>
+                                    <div class="sponsor-grid">
+                                        ${sponsorsHtml}
+                                    </div>
+                                </div>
+
                                 <div class="card-box">
                                     <h3 class="section-title" style="border-color:${ikinciRenk}; color:${ikinciRenk}">🚀 Yaklaşan Etkinlikler</h3>
                                     ${gelecekHtml}
                                 </div>
+
                                 <div class="card-box">
                                     <h3 class="section-title" style="border-color:#888; color:#aaa">📜 Geçmiş Etkinlikler</h3>
                                     ${gecmisHtml}
@@ -349,13 +386,6 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="card-box">
                                     <h3 class="section-title" style="border-color:${ikinciRenk}; color:${ikinciRenk}">Yönetim & Üyeler</h3>
                                     <div id="membersContainer">${membersHtml}</div>
-                                </div>
-
-                                <div class="card-box">
-                                    <h3 class="section-title" style="border-color:${ikinciRenk}; color:${ikinciRenk}">Sponsorlar</h3>
-                                    <div class="sponsor-grid">
-                                        ${sponsorsHtml}
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -421,5 +451,6 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
         document.addEventListener('keydown', (e) => { if (e.key === 'ArrowLeft') navigate(-1); if (e.key === 'ArrowRight') navigate(1); });
         updateCoverflow();
     </script>
+        <?php include 'footer.php'; ?>
 </body>
 </html>

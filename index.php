@@ -13,6 +13,8 @@ $bg_images = [
     2 => 'images/esogu.jpg',
     3 => 'images/estu.jpg'
 ];
+
+
 ?>
 
 <!DOCTYPE html>
@@ -42,22 +44,14 @@ $bg_images = [
         }
 
         /* Sol Üst Logo */
-        .brand-logo {
-            font-family: 'Montserrat', sans-serif; /* Logo için özel font */
-            font-size: 1.8rem;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-            display: flex; align-items: center;
-        }
-        
-        .brand-logo::after {
-            content: ''; display: block; width: 8px; height: 8px; 
-            background: #fff; border-radius: 50%; margin-left: 8px;
-            box-shadow: 0 0 10px rgba(255,255,255,0.8);
-        }
+        .brand-logo, .brand-link { font-family: 'Montserrat', sans-serif; display:flex; align-items:center; gap:10px }
+        .brand-text { font-size:1.6rem; font-weight:900; color:#fff; letter-spacing:3px; text-transform:uppercase }
+        .brand-link svg { width:34px; height:34px }
+        .brand-dot { width:8px; height:8px; background:#fff; border-radius:50%; box-shadow:0 0 10px rgba(255,255,255,0.8) }
+        /* Basit üst bağlantılar */
+        .top-links { margin-top:8px; display:flex; gap:12px; pointer-events:auto }
+        .top-links a { color: rgba(255,255,255,0.95); text-decoration:none; background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); padding:8px 12px; border-radius:10px; font-weight:700; border:1px solid rgba(255,255,255,0.04) }
+        .top-links a:hover { transform:translateY(-2px); background: rgba(255,255,255,0.12); transition:all 160ms }
 
         /* Sağ Alt İmza */
         .creator-credit {
@@ -142,7 +136,27 @@ $bg_images = [
 <body>
 
     <div class="branding-layer">
-        <div class="brand-logo">CEPKAMPÜS</div>
+        <div style="display:flex;align-items:center;gap:18px;pointer-events:auto">
+            <a href="index.php" class="brand-link" aria-label="Ana sayfa">
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                    <defs>
+                        <linearGradient id="b1" x1="0" x2="1">
+                            <stop offset="0" stop-color="#6EE7B7"/>
+                            <stop offset="1" stop-color="#60A5FA"/>
+                        </linearGradient>
+                    </defs>
+                    <rect width="64" height="64" rx="12" fill="#0b1220" />
+                    <path d="M16 40 L28 20 L36 34 L48 16" stroke="url(#b1)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div class="brand-text">CepKampüs</div>
+            </a>
+
+            <div class="top-links">
+                <a href="about.php">Hakkında</a>
+                <a href="report.php">Rapor</a>
+            </div>
+        </div>
+
         <div class="creator-credit">Project by <strong>Emre Can Ardıç</strong></div>
     </div>
 
@@ -167,5 +181,6 @@ $bg_images = [
         <?php endforeach; ?>
     </div>
 
+    <?php include 'footer.php'; ?>
 </body>
 </html>
