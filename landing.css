@@ -1,4 +1,3 @@
-/* landing.css */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap');
 
 body, html {
@@ -16,21 +15,19 @@ body, html {
     height: 100%;
 }
 
-/* Her Bir Üniversite Bölümü */
 .split {
-    flex: 1; /* Başlangıçta hepsi eşit genişlikte */
+    flex: 1;
     position: relative;
-    transition: all 0.5s ease-in-out; /* Akıcı animasyon */
+    transition: all 0.5s ease-in-out;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
     cursor: pointer;
-    text-decoration: none; /* Link alt çizgisini kaldır */
+    text-decoration: none;
     overflow: hidden;
 }
 
-/* Arkaplan Resmi Ayarları */
 .bg-image {
     position: absolute;
     top: 0;
@@ -43,19 +40,17 @@ body, html {
     z-index: 1;
 }
 
-/* Renk Katmanı (Overlay) - Başlangıçta görünür */
 .overlay {
     position: absolute;
-    top: 0;
+    background-color: rgba(0, 0, 0, 0.6);
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Koyu perde */
+    background-color: rgba(0, 0, 0, 0.6);
     transition: background-color 0.5s ease;
     z-index: 2;
 }
 
-/* İçerik (Yazılar) */
 .content {
     position: relative;
     z-index: 3;
@@ -75,28 +70,24 @@ body, html {
     opacity: 0.8;
 }
 
-/* === HOVER EFEKTLERİ (Kilit Nokta) === */
-
-/* Üzerine gelinen bölüm büyüsün */
 .split:hover {
-    flex: 2.5; /* Diğerlerinden 2.5 kat daha geniş olsun */
+    flex: 2.5;
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-/* Üzerine gelinen bölümün overlay'i açılsın (Resim netleşsin) */
 .split:hover .overlay {
-    background-color: rgba(0, 0, 0, 0.1); /* Perde kalkıyor */
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
-/* Üzerine gelinen bölümün resmi hafif zoom yapsın */
 .split:hover .bg-image {
     transform: scale(1.1);
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
-/* Diğer (üzerine gelinmeyen) bölümler hafifçe soluklaşsın */
 .container:hover .split:not(:hover) .overlay {
-    background-color: rgba(0, 0, 0, 0.8); /* Daha da kararsın */
+    background-color: rgba(0, 0, 0, 0.8);
 }
-/* --- Sadece Modal ve Buton İçin Eklenen Stiller --- */
+
 .hakkinda-btn {
     cursor: pointer;
     font-size: 0.8rem;
@@ -111,7 +102,7 @@ body, html {
 .modal-backdrop {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(0,0,0,0.9);
-    z-index: 9999; /* En üstte durması için */
+    z-index: 9999;
     display: none; justify-content: center; align-items: center;
     backdrop-filter: blur(5px);
 }
@@ -132,7 +123,6 @@ body, html {
 .sayi { font-size: 2rem; font-weight: bold; color: #4facfe; display: block;}
 .etiket { font-size: 0.8rem; color: #aaa; text-transform: uppercase; }
 
-/* Modal Aktifken */
 .modal-backdrop.aktif { display: flex; }
 
 @media (max-width: 768px) { .sayac-grid { grid-template-columns: 1fr 1fr; } }

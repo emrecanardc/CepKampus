@@ -1,18 +1,11 @@
 <?php
 require 'db_baglan.php';
-
 $uni_id = isset($_GET['uni_id']) ? (int)$_GET['uni_id'] : 1;
-
-// Üniversite rengini ve adını çek
 $uni_sorgu = $pdo->prepare("SELECT ad, ana_renk FROM universiteler WHERE uni_id = ?");
 $uni_sorgu->execute([$uni_id]);
 $uni_bilgi = $uni_sorgu->fetch();
-
 if (!$uni_bilgi) die("Hata: Üniversite bulunamadı!");
-
 $header_renk = $uni_bilgi['ana_renk'] ?? '#111';
-
-// Kulüpleri çek
 $kulupler = [];
 $kulup_sorgu = $pdo->prepare("SELECT * FROM kulupler WHERE uni_id = ?");
 $kulup_sorgu->execute([$uni_id]);
@@ -40,16 +33,17 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
             margin: 0; padding: 0;
         }
 
-        /* === HEADER === */
+        
         .uni-header {
             position: fixed; top: 0; left: 0; right: 0; height: 70px;
-            background-color: <?php echo $header_renk; ?>;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            background: transparent;
+            box-shadow: 0 6px 22px rgba(0,0,0,0.45);
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 18px; box-sizing: border-box;
-            z-index: 3000; border-bottom: 1px solid rgba(255,255,255,0.1);
-            backdrop-filter: blur(5px);
+            padding: 0 18px; box-sizing: border-box; position:relative;
+            z-index: 3000; border-bottom: 1px solid rgba(255,255,255,0.04);
+            backdrop-filter: blur(6px);
         }
+        .uni-header .accent-bar{ position:absolute; left:0; right:0; top:0; height:6px; border-bottom-left-radius:6px; border-bottom-right-radius:6px; pointer-events:none }
         .uni-header .header-left,
         .uni-header .header-center,
         .uni-header .header-right { display:flex; align-items:center; gap:12px }
@@ -62,7 +56,6 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
         .back-btn { color: white; background: rgba(0,0,0,0.18); padding:8px 14px; border-radius:22px; text-decoration:none; border:1px solid rgba(255,255,255,0.12); font-size:0.95rem; font-weight:600 }
         .back-btn:hover { background: rgba(255,255,255,0.08) }
         .brand-link { display:inline-flex; align-items:center; gap:10px; color:#fff; text-decoration:none }
-        .brand-link svg { width:30px; height:30px; flex:0 0 30px }
         .brand-text { font-weight:900; text-transform:uppercase; letter-spacing:2px }
         .header-link { color:#fff; text-decoration:none; background: rgba(255,255,255,0.06); padding:8px 12px; border-radius:10px; font-weight:700 }
         .header-link:hover { background: rgba(255,255,255,0.12); }
@@ -76,7 +69,7 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
         .header-links a { color:#fff; text-decoration:none; background: rgba(255,255,255,0.06); padding:6px 10px; border-radius:8px; font-weight:600 }
         .header-links a:hover { background: rgba(255,255,255,0.12); }
 
-        /* === SLIDER === */
+        
         .info { top: 120px; } 
         #current-title { text-shadow: 0 4px 10px rgba(0,0,0,0.5); font-size: 3rem; margin-bottom: 5px; }
         #current-description { text-shadow: 0 2px 5px rgba(0,0,0,0.5); font-size: 1.2rem; margin-top: 5px; }
@@ -184,19 +177,9 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
 <body>
 
     <div class="uni-header">
+        <div class="accent-bar" style="background: <?php echo $header_renk; ?>; box-shadow: 0 8px 30px <?php echo $header_renk; ?>33"></div>
         <div class="header-left">
             <a href="index.php" class="brand-link" aria-label="Ana sayfa">
-                <!-- inline logo SVG -->
-                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                    <defs>
-                        <linearGradient id="g1" x1="0" x2="1">
-                            <stop offset="0" stop-color="#6EE7B7"/>
-                            <stop offset="1" stop-color="#60A5FA"/>
-                        </linearGradient>
-                    </defs>
-                    <rect width="64" height="64" rx="12" fill="#0b1220" />
-                    <path d="M16 40 L28 20 L36 34 L48 16" stroke="url(#g1)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
                 <span class="brand-text">CepKampüs</span>
             </a>
         </div>
@@ -207,8 +190,8 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
         </div>
 
         <div class="header-right">
-            <a href="about.php" class="header-link">Hakkında</a>
-            <a href="report.php" class="header-link">Rapor</a>
+
+            <a href="rapor.php" class="header-link">Rapor</a>
         </div>
     </div>
 
@@ -254,6 +237,14 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
         
         let currentIndex = Math.floor(items.length / 2);
 
+        function ensureHex(v){ if(!v) return ''; v = String(v).trim(); if(v === '') return ''; return v.charAt(0) === '#' ? v : '#'+v; }
+
+        function formatDateTime(dtStr){ try{ let d = new Date(dtStr); if(isNaN(d)) return dtStr||''; return d.toLocaleString(); } catch(e){ return dtStr||'' } }
+
+        const iconMap = {
+            film:'🎬', briefcase:'💼', plane:'✈️', heartbeat:'❤️', microchip:'💻', music:'🎵', 'hand-holding-heart':'🤝', 'shield-alt':'🛡️', database:'🗄️', gamepad:'🎮', palette:'🎨', bicycle:'🚲', flask:'⚗️', 'theater-masks':'🎭', utensils:'🍽️'
+        };
+
         function loadClubDetails(index) {
             if (!items[index]) return;
 
@@ -267,8 +258,25 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                 .then(data => {
                     if (data.error) return;
 
-                    const anaRenk = data.kulup.ana_renk || '#1a1a2e';
-                    const ikinciRenk = data.kulup.ikincil_renk || '#667eea';
+                    const anaRenk = ensureHex(data.kulup.ana_renk) || '#1a1a2e';
+                    const ikinciRenk = ensureHex(data.kulup.ikincil_renk) || '#667eea';
+
+                    // Logo / ikon fallback: tercih sırası -> resim_url (gerçek dosya) -> emoji ikon -> baş harf
+                    let logoHtml = '';
+                    const rawResim = data.kulup.resim_url || '';
+                    const isDefaultImage = rawResim === '' || rawResim.indexOf('default.jpg') !== -1;
+                    if(!isDefaultImage){
+                        logoHtml = `<img src="${rawResim}" alt="${data.kulup.ad||''}" style="width:72px;height:72px;object-fit:cover;border-radius:12px;border:2px solid rgba(255,255,255,0.06)">`;
+                    } else {
+                        const ik = (data.kulup.ikon || '').toString();
+                        const emoji = iconMap[ik] || null;
+                        if(emoji){
+                            logoHtml = `<div class=\"kulup-logo-emoji\">${emoji}</div>`;
+                        } else {
+                            const initial = (data.kulup.ad||'').charAt(0).toUpperCase() || '?';
+                            logoHtml = `<div class=\"kulup-logo-initial\">${initial}</div>`;
+                        }
+                    }
 
                     document.body.style.background = `radial-gradient(ellipse at center, ${anaRenk} 0%, #000000 100%)`;
                     titleEl.textContent = data.kulup.ad;
@@ -291,8 +299,33 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                                 <div class="event-meta"><span>📍 ${e.konum}</span><span>👥 Katılım: ${e.tahmini_katilimci} Kişi</span></div>
                             </div>`).join('') : '<p style="opacity:0.6">Geçmiş etkinlik yok.</p>';
 
-                    // Üye Tablosu
+                    // Üye Tablosu + Rol filtresi (öncelikle server'dan gelen tüm roller, yoksa üyelerden çıkar)
+                    const roles = (data.all_roles && data.all_roles.length) ? data.all_roles : Array.from(new Set(data.uyeler.map(u => (u.rol||'').trim()).filter(r => r !== '')));
+                    // Show up to 3 primary role buttons (design requirement)
+                    const preferred = ['Baskan','Baskan Yardimcisi','Uye'];
+
+                    // Short display labels for certain roles (display-only)
+                    function displayRoleLabel(r){
+                        if(!r) return '';
+                        if(r === 'Baskan Yardimcisi') return 'BAŞKAN Y.';
+                        if(r === 'Baskan') return 'BAŞKAN';
+                        return r;
+                    }
+                    let buttonsList = [];
+                    preferred.forEach(p=>{ if(roles.includes(p) && buttonsList.length<3) buttonsList.push(p); });
+                    // fill remaining with other roles if less than 3
+                    for(let i=0;i<roles.length && buttonsList.length<3;i++){ if(!buttonsList.includes(roles[i])) buttonsList.push(roles[i]); }
+
+                    const roleButtons = buttonsList.map(r => `
+                        <button type="button" class="role-btn" data-role="${r}" title="${r}">${displayRoleLabel(r)}</button>
+                    `).join('');
+
                     let membersHtml = `
+                        <div class="members-controls">
+                            <div class="filter-pill" aria-label="Rol filtreleri">
+                                <div class="role-chips-container">${roleButtons}</div>
+                            </div>
+                        </div>
                         <table id="membersTable" class="display" style="width:100%">
                             <thead>
                                 <tr>
@@ -304,7 +337,7 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                                 ${data.uyeler.map(u => `
                                     <tr>
                                         <td>${u.ad} ${u.soyad}</td>
-                                        <td><span class="role-badge">${u.rol}</span></td>
+                                        <td><span class="role-badge">${displayRoleLabel(u.rol)}</span></td>
                                     </tr>
                                 `).join('')}
                             </tbody>
@@ -357,12 +390,40 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                     }
 
                     let html = `
+                        <style>
+                            .kulup-logo-emoji, .kulup-logo-initial{width:72px;height:72px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:32px;color:#fff}
+                            .kulup-logo-emoji{background:linear-gradient(135deg, ${anaRenk} 0%, ${ikinciRenk} 100%)}
+                            .kulup-logo-initial{background:linear-gradient(135deg, ${anaRenk} 0%, ${ikinciRenk} 100%);font-weight:800}
+                            .kulup-meta { font-size:0.9rem; color: rgba(255,255,255,0.9); }
+
+                            /* Members role filter styling to match site (transparent pill + icon) */
+                            .members-controls{ margin-bottom:12px }
+                            .filter-pill{ display:flex; align-items:center; gap:8px; background:linear-gradient(90deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015)); padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,0.04); backdrop-filter: blur(4px); width:100%; max-width:920px }
+                            .role-chips-container{ display:flex; gap:8px; align-items:center; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+                            .role-chips-container::-webkit-scrollbar{ height:6px }
+                            .role-chips-container::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.08); border-radius:4px }
+                            .role-btn{ background: rgba(255,255,255,0.03); color:#e6eef8; border:1px solid rgba(255,255,255,0.04); padding:6px 10px; border-radius:999px; font-weight:700; font-size:0.9rem; cursor:pointer; min-width:72px; text-align:center; flex:0 0 auto; white-space:nowrap }
+                            .role-btn.active{ background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); box-shadow: 0 6px 18px rgba(0,0,0,0.45) }
+                            .role-btn:focus{ outline:none }
+                            .role-chip.checked{ background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); box-shadow: 0 4px 18px rgba(0,0,0,0.45) }
+                            .role-badge{background: rgba(255,255,255,0.06); padding:5px 8px; border-radius:999px; font-weight:700; font-size:0.85rem}
+                            @media(max-width:700px){ .filter-label{display:none} .filter-pill{padding:6px 8px} .chip-label{font-size:0.78rem} .role-chips-container{max-width:100%;} }
+                            @media(max-width:480px){ .role-btn{ min-width:48px; font-size:0.78rem; padding:5px 8px } }
+                        </style>
                         <div class="details-grid">
                             <div class="left-col">
                                 <div class="card-box">
-                                    <h3 class="section-title" style="border-color:${ikinciRenk}; color:${ikinciRenk}">Hakkında</h3>
-                                    <p>${data.kulup.aciklama || 'Açıklama bulunmuyor.'}</p>
-                                    <p style="margin-top:10px; opacity:0.7;">Kategori: <strong>${data.kulup.kategori || 'Genel'}</strong></p>
+                                    <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px">
+                                        ${logoHtml}
+                                        <div>
+                                            <h3 class="section-title" style="margin:0; border:none; padding:0; color:${ikinciRenk}; font-size:1.15rem">${data.kulup.ad || ''}</h3>
+                                            <div class="kulup-meta">${data.kulup.kategori ? data.kulup.kategori + ' · ' : ''}${data.kulup.kurulus_yili ? 'Kuruluş: ' + data.kulup.kurulus_yili : ''}</div>
+                                            <div style="font-size:0.8rem;opacity:0.75;margin-top:6px">Sisteme eklenme: ${formatDateTime(data.kulup.olusturulma_tarihi)}</div>
+                                        </div>
+                                    </div>
+
+                                    <p style="margin-top:8px">${data.kulup.aciklama || 'Açıklama bulunmuyor.'}</p>
+                                    <p style="margin-top:10px; opacity:0.8;">Kategori: <strong>${data.kulup.kategori || 'Genel'}</strong></p>
                                 </div>
 
                                 <div class="card-box">
@@ -400,7 +461,7 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                         $('#membersTable').DataTable().destroy();
                     }
 
-                    $('#membersTable').DataTable({
+                    let membersTable = $('#membersTable').DataTable({
                         "language": {
                             "search": "Ara:",
                             "lengthMenu": "Sayfada _MENU_ kayıt göster",
@@ -421,6 +482,37 @@ $kulupler = $kulup_sorgu->fetchAll(PDO::FETCH_ASSOC);
                         "autoWidth": false,
                         "dom": 'frt<"bottom-wrapper"ip><"length-wrapper"l>' 
                     });
+
+                    // Rol filtresi - checkbox chips ile DataTable filtresi uygula
+                    function applyRoleFilter(){
+                        const active = Array.from(document.querySelectorAll('.role-btn.active')).map(b=>b.getAttribute('data-role'));
+                        if(active.length === 0 || active.length === roles.length){
+                            membersTable.column(1).search('').draw();
+                            return;
+                        }
+                        const esc = active.map(v => $.fn.dataTable.util.escapeRegex(v));
+                        const regex = '^(?:' + esc.join('|') + ')$';
+                        membersTable.column(1).search(regex, true, false).draw();
+                    }
+
+                    // initialize role buttons and events
+                    document.querySelectorAll('.role-btn').forEach(btn=>{
+                        btn.classList.remove('active');
+                        btn.addEventListener('click', ()=>{
+                            // toggle active state
+                            btn.classList.toggle('active');
+                            applyRoleFilter();
+                        });
+                    });
+
+                    // Move the members-controls under the DataTables search box for a cleaner layout
+                    try{
+                        const wrapperFilter = $('#membersTable_wrapper .dataTables_filter');
+                        if(wrapperFilter.length){
+                            wrapperFilter.css({'display':'flex','flex-direction':'column','align-items':'flex-start','gap':'8px'});
+                            wrapperFilter.append($('.members-controls'));
+                        }
+                    } catch(e){ console.warn('Could not move members-controls:', e); }
                 })
                 .catch(err => console.error("Veri çekme hatası:", err));
         }

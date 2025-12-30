@@ -1,20 +1,16 @@
 <?php
 require 'db_baglan.php';
-
 try {
     $stmt = $pdo->query("SELECT * FROM universiteler ORDER BY uni_id ASC LIMIT 3");
     $universiteler = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Veri çekme hatası: " . $e->getMessage());
 }
-
 $bg_images = [
     1 => 'images/anadolu_uni.jpg',
     2 => 'images/esogu.jpg',
     3 => 'images/estu.jpg'
 ];
-
-
 ?>
 
 <!DOCTYPE html>
@@ -26,16 +22,16 @@ $bg_images = [
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     
     <style>
-        /* === GENEL AYARLAR === */
+        
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; font-family: 'Poppins', sans-serif; }
         .container { display: flex; width: 100%; height: 100%; }
 
-        /* === YENİ EKLENEN MARKA KATMANI (Branding Layer) === */
+        
         .branding-layer {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; /* Tıklamalar arkaya geçer */
-            z-index: 1000; /* En üstte durur */
+            pointer-events: none;
+            z-index: 1000;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -43,17 +39,16 @@ $bg_images = [
             box-sizing: border-box;
         }
 
-        /* Sol Üst Logo */
+        
         .brand-logo, .brand-link { font-family: 'Montserrat', sans-serif; display:flex; align-items:center; gap:10px }
         .brand-text { font-size:1.6rem; font-weight:900; color:#fff; letter-spacing:3px; text-transform:uppercase }
-        .brand-link svg { width:34px; height:34px }
         .brand-dot { width:8px; height:8px; background:#fff; border-radius:50%; box-shadow:0 0 10px rgba(255,255,255,0.8) }
-        /* Basit üst bağlantılar */
+        
         .top-links { margin-top:8px; display:flex; gap:12px; pointer-events:auto }
         .top-links a { color: rgba(255,255,255,0.95); text-decoration:none; background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03)); padding:8px 12px; border-radius:10px; font-weight:700; border:1px solid rgba(255,255,255,0.04) }
         .top-links a:hover { transform:translateY(-2px); background: rgba(255,255,255,0.12); transition:all 160ms }
 
-        /* Sağ Alt İmza */
+        
         .creator-credit {
             font-family: 'Montserrat', sans-serif;
             text-align: right;
@@ -72,7 +67,7 @@ $bg_images = [
             border-bottom: 2px solid rgba(255,255,255,0.3);
         }
 
-        /* === MEVCUT TASARIM (AYNEN KORUNDU) === */
+        
         .split {
             flex: 1;
             position: relative;
@@ -103,12 +98,12 @@ $bg_images = [
             padding: 20px;
         }
 
-        /* Hover Efektleri */
+        
         .split:hover { flex: 2.5; }
         .split:hover .bg-image { transform: scale(1.1); filter: grayscale(0%); }
         .split:hover .overlay { opacity: 0.1 !important; }
 
-        /* Başlıklar ve Buton */
+        
         .content h1 {
             font-size: 2.5rem; margin-bottom: 10px; text-transform: uppercase;
             text-shadow: 0 4px 15px rgba(0,0,0,0.5);
@@ -138,26 +133,15 @@ $bg_images = [
     <div class="branding-layer">
         <div style="display:flex;align-items:center;gap:18px;pointer-events:auto">
             <a href="index.php" class="brand-link" aria-label="Ana sayfa">
-                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                    <defs>
-                        <linearGradient id="b1" x1="0" x2="1">
-                            <stop offset="0" stop-color="#6EE7B7"/>
-                            <stop offset="1" stop-color="#60A5FA"/>
-                        </linearGradient>
-                    </defs>
-                    <rect width="64" height="64" rx="12" fill="#0b1220" />
-                    <path d="M16 40 L28 20 L36 34 L48 16" stroke="url(#b1)" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
                 <div class="brand-text">CepKampüs</div>
             </a>
 
             <div class="top-links">
-                <a href="about.php">Hakkında</a>
-                <a href="report.php">Rapor</a>
+                <a href="rapor.php">Rapor</a>
             </div>
         </div>
 
-        <div class="creator-credit">Project by <strong>Emre Can Ardıç</strong></div>
+        
     </div>
 
     <div class="container">
